@@ -1,0 +1,129 @@
+#pattern-grid {
+    border: 1px solid #000;
+}
+
+#left-menu {
+    background-color: #e6e6e6;
+}
+
+#right-menu {
+    background-color: #f2f2f2;
+}
+
+#container {
+    max-width: 95%;
+    padding-top: 2.5%;
+    padding-bottom: 2.5%;
+}
+
+.pattern-cell {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.pattern-shape {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.bold-label {
+    font-weight: bold;
+}
+
+.pattern-rotation-0 {
+    transform: rotate(0);
+}
+
+.pattern-rotation-90 {
+    transform: rotate(90deg);
+}
+
+.pattern-rotation-180 {
+    transform: rotate(180deg);
+}
+
+.pattern-rotation-270 {
+    transform: rotate(270deg);
+}
+
+.hide-radio-btn-option {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+}
+
+.range-pattern-quantity {
+    margin-left: -13%;
+    width: 190px;
+}
+
+.margin-left-85p {
+    margin-left: -85%;
+}
+
+.align-hide-radio-txt {
+    margin-left: -25px;
+}
+
+.color-radio-btn {
+    width: 20px; 
+    height: 20px;
+    --bs-bg-opacity: 1;
+}
+
+.btn-width {
+    width: 50%;
+    font-size: 1.0em;
+}
+
+.color-red {
+    background-color: red;
+}
+
+.color-blue {
+    background-color: blue;
+}
+
+.color-rosybrown {
+    background-color: rosybrown;
+}
+
+.color-lightblue {
+    background-color: lightblue;
+}
+
+.color-yellow {
+    background-color: yellow;
+}
+
+.color-green {
+    background-color: green;
+}
+
+.color-white {
+    background-color: white;
+}
+
+.color-black {
+    background-color: black;
+}
+
+
+/* Grid style */
+.grid-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.grid-box {
+    background-color: #ccc;
+    /* margin: 1px; */
+}

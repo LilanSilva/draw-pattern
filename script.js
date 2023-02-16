@@ -1,7 +1,6 @@
 // Global variables
-let patternFormatText = "9x9";      // format input
-let patternSize = 50;               // Size input
-let patternFormat = { col: 9, row: 9 };
+let patternSize = 50;               
+let patternFormat = { col: 9, row: 9, canvasWidth: 1080, canvasHeigth: 1080 };
 let patternColors = ['red'];
 let patternQuantity = 10;
 let outerRatio = 0.7;
@@ -20,6 +19,9 @@ function resizeScreen() {
 
   canvas.style.width = (divElement.clientWidth - (divElement.clientWidth * 0.16)) + "px";
   canvas.style.height = (divElement.clientHeight - 300) + "px";
+
+  canvas.width = patternFormat.canvasWidth;
+  canvas.height = patternFormat.canvasHeigth;
 }
 
 // Draw pattern
@@ -102,14 +104,20 @@ function eventBinder() {
         case '9x9':
           patternFormat.col = 9;
           patternFormat.row = 9;
+          patternFormat.canvasWidth = 1080;
+          patternFormat.canvasHeigth = 1080;
           break;
         case '16x9':
           patternFormat.col = 16;
           patternFormat.row = 9;
+          patternFormat.canvasWidth = 1920;
+          patternFormat.canvasHeigth = 1080;
           break;
         case '9x16':
           patternFormat.col = 9;
           patternFormat.row = 16;
+          patternFormat.canvasWidth = 1080;
+          patternFormat.canvasHeigth = 1920;
           break;
       }
     });

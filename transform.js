@@ -35,10 +35,10 @@ function getRandomRotation() {
 }
 
 // Transform shape according to provide settings
-function transformShape(colorOptions) {
+function transformShape(colorOptions, size) {
     var shape = getRandomShape();
 
-    shape = shape.replaceAll('@@size', '100px');
+    shape = shape.replaceAll('@@size', (size + 'px'));
     shape = shape.replace('@@rotation', getRandomRotation());
     shape = shape.replace('@@color', getColorString(colorOptions));
 

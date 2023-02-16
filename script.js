@@ -5,7 +5,22 @@ let patternFormat = { col: 9, row: 9 };
 let patternColors = ['red'];
 let patternQuantity = 10;
 let outerRatio = 0.7;
+let imageType = "svg";
 
+
+// Resize screen 
+function resizeScreen() {
+  const patternGrid = document.getElementById("pattern-grid");
+  const heightAdjuster = document.getElementById("height-adjuster");
+  const divElement = document.getElementById('right-menu');
+  const canvas = document.getElementById("pattern-svg");
+
+  patternGrid.style.height = (window.innerHeight - (window.innerHeight * 0.16)) + "px";
+  heightAdjuster.style.height = (window.innerHeight - 700) + "px";
+
+  canvas.style.width = (divElement.clientWidth - (divElement.clientWidth * 0.16)) + "px";
+  canvas.style.height = (divElement.clientHeight - 300) + "px";
+}
 
 // Draw pattern
 function drawPattern() {
@@ -14,10 +29,10 @@ function drawPattern() {
     let numCols = patternFormat.col;
   
     // Calculate cell size
-    const divElement = document.getElementById('pattern-grid');
+    const divElement = document.getElementById('pattern-svg');
     const cellSize = Math.floor((divElement.clientWidth - 100) / numCols);
   
-    let counter;
+    let counter = 0;
     let gridInfo = [];
     // Generate SVG elements
     for (let rowIndex = 0; rowIndex < numRows; rowIndex++) {
@@ -26,7 +41,7 @@ function drawPattern() {
         const y = colIndex * cellSize;
 
         // Only draw if in outer layer or random chance
-        if ((rowIndex === 0 || rowIndex === numRows - 1 || colIndex === 0 || colIndex === numCols - 1) && counter <= patternQuantity) {
+        if ((rowIndex === 0 || rowIndex === numRows - 1 || colIndex === 0 || colIndex === numCols - 1) && counter < patternQuantity) {
           let item = {};
           item.xValue = x;
           item.yValue = y;
@@ -38,34 +53,41 @@ function drawPattern() {
       }
     }
 
-    // Resize screen 
-    const patternGrid = document.getElementById("pattern-grid");
-    const heightAdjuster = document.getElementById("height-adjuster");
-    patternGrid.style.height = (window.innerHeight - (window.innerHeight * 0.16)) + "px";
-    heightAdjuster.style.height = (window.innerHeight - 700) + "px";
-
     generateCanvas(gridInfo);
+}
+
+// Donload image 
+function downloadImage() {
+  if (imageType === 'svg') {
+    exportSvg();
+  }
+  else {
+    canvasExportAsPng();
+  }
 }
   
 // Generate canvas based on pattern
 function generateCanvas(gridInfo) {
-  const divElement = document.getElementById('right-menu');
+  if (gridInfo.length > 0) {
+    resizeScreen();
 
-  var img = new Image();
-  img.src = "data:image/svg+xml;utf8," + encodeURIComponent(transformShape(patternColors));
-
-  img.onload = function() {
     var canvas = document.getElementById("pattern-svg");
-    canvas.style.width = (divElement.clientWidth - (divElement.clientWidth * 0.16)) + "px";
-    canvas.style.height = (divElement.clientHeight - 300) + "px";
     var context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(img, 0, 100);
-  };
+
+    gridInfo.forEach((item) => {
+      var img = new Image();
+      img.src = "data:image/svg+xml;utf8," + encodeURIComponent(transformShape(patternColors, 25));
+
+      img.onload = function() {
+        context.drawImage(img, item.xValue, item.yValue);
+      };
+    });
+  }
 }
-  
-// Initialize the UI
-function initialize() {
+
+// Event binder
+function eventBinder() {
   // Add a click event listener to each label
   const formatLabels = document.querySelectorAll('label[for^="format-"]');
   formatLabels.forEach((label) => {
@@ -106,7 +128,7 @@ function initialize() {
       });
   });
 
-  // Add event listener to each color radio button
+  // Add click event listener to each color radio button
   const colorRadios = document.querySelectorAll('input[name="color"]');
   colorRadios.forEach((radio) => {
       radio.addEventListener('click', (event) => {
@@ -120,21 +142,43 @@ function initialize() {
       });
   });
 
-  // Event listener for pattern quantity change
+  // Add event listener for pattern quantity change
   document.getElementById('pattern-quantity').addEventListener('change', () => {
     patternQuantity = Number(document.getElementById('pattern-quantity').value);
   });
 
-  // Attach event listeners
+  // Add generate button event listeners
   const generateButton = document.getElementById("generate-button");
   generateButton.addEventListener("click", drawPattern);
+
+  // Add svg listener for pattern quantity change
+  document.getElementById('svgLabel').addEventListener('click', () => {
+    imageType = 'svg';
+  });
+
+  // Add png ang png listener for pattern quantity change
+  document.getElementById('pngLabel').addEventListener('click', () => {
+    imageType = 'png';
+  });
+
+  // Add download button event listner
+  const downloadButton = document.getElementById("download-button");
+  downloadButton.addEventListener("click", downloadImage);
 
   window.addEventListener('resize', function() {
     drawPattern();
   });
 
+  resizeScreen();
+}
+  
+// Initialize the UI
+function initialize() {
+  // event binder
+  eventBinder();
+
   // draw pattern 
-  drawPattern();
+  //drawPattern();
 }
 
 // Initialize the UI when the page has loaded

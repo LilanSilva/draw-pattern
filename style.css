@@ -32,22 +32,6 @@
     font-weight: bold;
 }
 
-.pattern-rotation-0 {
-    transform: rotate(0);
-}
-
-.pattern-rotation-90 {
-    transform: rotate(90deg);
-}
-
-.pattern-rotation-180 {
-    transform: rotate(180deg);
-}
-
-.pattern-rotation-270 {
-    transform: rotate(270deg);
-}
-
 .hide-radio-btn-option {
     position: absolute;
     overflow: hidden;
@@ -62,25 +46,30 @@
 .range-pattern-quantity {
     margin-left: -13%;
     width: 190px;
+    cursor: pointer;
 }
 
 .margin-left-85p {
     margin-left: -85%;
+    cursor: pointer;
 }
 
 .align-hide-radio-txt {
     margin-left: -25px;
+    cursor: pointer;
 }
 
 .color-radio-btn {
     width: 20px; 
     height: 20px;
     --bs-bg-opacity: 1;
+    cursor: pointer;
 }
 
 .btn-width {
     width: 50%;
     font-size: 1.0em;
+    cursor: pointer;
 }
 
 .color-red {

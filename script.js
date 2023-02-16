@@ -197,12 +197,19 @@ function initialize() {
     const generateButton = document.getElementById("generate-button");
     generateButton.addEventListener("click", handleGenerate);
 
-    // const divElement = document.getElementById('canvas-page');
-    // window.addEventListener('resize', function() {
-    //   // get the current width of the div element in pixels
-    //   const divWidth = divElement.clientWidth;
-    //   console.log(divWidth + 'px');
-    // });
+    const divElement = document.getElementById('right-menu');
+    const patternGrid = document.getElementById("pattern-grid");
+    const heightAdjuster = document.getElementById("height-adjuster");
+    const canvas = document.getElementById("pattern-svg");
+    window.addEventListener('resize', function() {
+      resizeWindow(patternGrid, heightAdjuster);
+    });
+}
+
+// get the current width of the div element in pixels
+function resizeWindow(patternGrid, heightAdjuster) {
+  patternGrid.style.height = (window.innerHeight - (window.innerHeight * 0.16)) + "px";
+  heightAdjuster.style.height = (window.innerHeight - 700) + "px";
 }
   
 // Initialize the UI when the page has loaded

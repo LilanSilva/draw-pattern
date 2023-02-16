@@ -125,35 +125,33 @@
                         <span id="generate-button" class="badge rounded-pill bg-secondary btn-width">Generera</span>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="mt-5"></div>
-                    <div class="mt-5"></div>
-                    <div class="mt-5"></div>
-                    <div class="mt-5"></div>
-                    <div class="mt-5"></div>
-                    <div class="mt-5 mx-4">
-                        <div class="row"><label class="fw-bold">Filtyp</label></div>
-                        <div>
-                            <div class="form-check form-check-inline">
-                                <label class="form-label bold-label margin-left-85p" for="download-svg" value="svg">EPS</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <label class="form-label bold-label margin-left-85p" for="download-png" value="png">PNG</label>
+                <div class="row footer-btn">
+                    <div class="row">
+                        <div id="height-adjuster"></div>
+                        <div class="mt-5 mx-4">
+                            <div class="row"><label class="fw-bold">Filtyp</label></div>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <label class="form-label bold-label margin-left-85p" for="download-svg" value="svg">EPS</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <label class="form-label bold-label margin-left-85p" for="download-png" value="png">PNG</label>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="mt-4 mx-4 mb-4">
-                        <span id="download-button" class="badge rounded-pill bg-dark btn-width">Ladda ner</span>
+                    <div class="row">
+                        <div class="mt-4 mx-4 mb-4">
+                            <span id="download-button" class="badge rounded-pill bg-dark btn-width">Ladda ner</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <div id="right-menu" class="col-sm-7 col-md-8 col-lg-8 col-xl-9">
                 <div class="mt-4 mx-4 mb-4">
-                    <div class="grid-container" style="border: 2px red solid;">
+                    <div id="pattern-grid" class="grid-container" style="border: 2px red solid; min-height: 550px; min-width: 550px;">
                         <div class="grid-box">
-                            <canvas id="pattern-svg" style="border: 2px green solid;"></canvas>
+                            <canvas id="pattern-svg" style="border: 2px green solid; min-height: 500px; min-width: 500px; background-color: white;"></canvas>
                         </div>
                     </div>
                 </div>

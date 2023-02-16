@@ -1,12 +1,8 @@
-// Constants
-const SHAPE_TYPES = ['square', 'triangle', 'circle'];
-const SHAPE_ROTATIONS = [0, 90, 180, 270];
-
 // Global variables
 let patternFormatText = "9x9";      // format input
 let patternSize = 50;               // Size input
-let patternFormat = { width: 9, height: 9 };
-let patternColors = ['#000000'];
+let patternFormat = { col: 9, row: 9 };
+let patternColors = ['red'];
 let patternQuantity = 10;
 let outerRatio = 0.7;
 
@@ -23,7 +19,7 @@ function getSelectedQuantity(){
 // Generate the pattern
 function generatePattern() {
   let shapes = [];
-  const outerCells = patternFormat.width * 2 + (patternFormat.height - 2) * 2;
+  const outerCells = patternFormat.col * 2 + (patternFormat.row - 2) * 2;
   const outerShapeCount = Math.round(patternQuantity * outerRatio);
   const innerShapeCount = patternQuantity - outerShapeCount;
 
@@ -32,7 +28,7 @@ function generatePattern() {
   }
 
   for (let i = 0; i < innerShapeCount; i++) {
-    shapes.push(generateShape(outerCells, patternFormat.width * patternFormat.height - 1));
+    shapes.push(generateShape(outerCells, patternFormat.col * patternFormat.row - 1));
   }
 
   return shapes;
@@ -47,48 +43,7 @@ function generateShape(min, max) {
   return { type, rotation, color, position };
 }
 
-// Constants
-const colorOptions = [
-    '#3d3d3d',
-    '#ffffff',
-    '#a5a5a5',
-    '#bfbfbf',
-    '#d5d5d5',
-    '#ebebeb',
-    '#f5f5f5',
-    '#8b8b8b',
-    '#c9c9c9',
-    '#e2e2e2',
-    '#f2f2f2',
-    '#fafafa',
-  ];
-  
-// ------------------- Pattern utility functions ------------------- //
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
-}
-  
-function getRotationString() {
-  let rotation = getRandomInt(4);
-
-  switch (rotation) {
-    case 1:
-      return 'rotate(90)';
-    case 2:
-      return 'rotate(180)';
-    case 3:
-      return 'rotate(270)';
-    default:
-      return '';
-  }
-}
-  
-function getColorString(numberofColorCodes) {
-  let colorIndex = getRandomInt(numberofColorCodes);
-  return colorOptions[colorIndex];
-}
-  
 function drawPattern() {
     const patternCanvas = document.getElementById('pattern-svg');
     const ctx = patternCanvas.getContext('2d');
@@ -100,27 +55,16 @@ function drawPattern() {
     const quantityValue = parseInt(patternQuantity);
   
     // Calculate number of rows and columns
-    let numRows, numCols;
-    if (formatValue.width === 9 && formatValue.height === 9) {
-      numRows = 9;
-      numCols = 9;
-    } else if (formatValue.width === 16 && formatValue.height === 9) {
-      numRows = 9;
-      numCols = 16;
-    } else if (formatValue.width === 9 && formatValue.height === 16) {
-      numRows = 16;
-      numCols = 9;
-    }
+    let numRows = patternFormat.row;
+    let numCols = patternFormat.col;
   
     // Calculate cell size
-    const cellSize = 100 / sizeValue;
+    const divElement = document.getElementById('canvas-page');
+    const cellSize = (divElement.clientWidth - 100) / numCols;
   
     // Generate SVG elements
-    const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svgElement.setAttribute('viewBox', '0 0 100 100');
-    svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    for (let i = 0; i < numRows; i++) {
-      for (let j = 0; j < numCols; j++) {
+    for (let rowIndex = 0; rowIndex < numRows; rowIndex++) {
+      for (let colIndex = 0; colIndex < numCols; colIndex++) {
         const randomRotation = getRandomInt(4);
         const randomColorIndex = getRandomInt(colorValue.length);
         const colorString = getColorString(colorValue[randomColorIndex]);
@@ -129,27 +73,19 @@ function drawPattern() {
         const y = i * cellSize;
 
 
-        // Only draw if in outer layer or random chance
-        if (i === 0 || i === numRows - 1 || j === 0 || j === numCols - 1 || Math.random() < 0.3) {
-          const rectElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-          rectElement.setAttribute('x', `${x}%`);
-          rectElement.setAttribute('y', `${y}%`);
-          rectElement.setAttribute('width', `${cellSize}%`);
-          rectElement.setAttribute('height', `${cellSize}%`);
-          rectElement.setAttribute('fill', colorString);
-          rectElement.setAttribute('transform', rotationString);
-          svgElement.appendChild(rectElement);
-        }
-
+        // // Only draw if in outer layer or random chance
+        // if (rowIndex === 0 || rowIndex === numRows - 1 || colIndex === 0 || colIndex === numCols - 1) {
+        //   const rectElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        //   rectElement.setAttribute('x', `${x}%`);
+        //   rectElement.setAttribute('y', `${y}%`);
+        //   rectElement.setAttribute('width', `${cellSize}%`);
+        //   rectElement.setAttribute('height', `${cellSize}%`);
+        //   rectElement.setAttribute('fill', colorString);
+        //   rectElement.setAttribute('transform', rotationString);
+        //   svgElement.appendChild(rectElement);
+        // }
       }
     }
-
-    const svgString = new XMLSerializer().serializeToString(svgElement);
-    const img = new Image();
-    img.onload = function() {
-      ctx.drawImage(img, 0, 0);
-    };
-    img.src = 'data:image/svg+xml;base64,' + btoa(svgString);
 }
   
 
@@ -165,78 +101,26 @@ function handleGenerate() {
 
   // var tt = generatePattern(patternFormatText, patternSize, patternColors, quantity);
 
-  // Get the input values from the user
-  const format = "9/9";
-  const size = 1;
-  const colors = [
-    '#3d3d3d',
-    '#ffffff',
-    '#a5a5a5',
-    '#bfbfbf',
-    '#d5d5d5',
-    '#ebebeb',
-    '#f5f5f5',
-    '#8b8b8b',
-    '#c9c9c9',
-    '#e2e2e2',
-    '#f2f2f2',
-    '#fafafa',
-  ];
-  const quantity = 15;
+  
+  
+  const divElement = document.getElementById('right-menu');
 
-  // Calculate the number of rows and columns based on the format and size
-  let rows, cols;
-  if (format === "9/9") {
-    rows = cols = size;
-  } else if (format === "16/9") {
-    rows = size;
-    cols = Math.floor(size * (16/9));
-  } else if (format === "9/16") {
-    rows = Math.floor(size * (9/16));
-    cols = size;
-  }
+  var img = new Image();
+  var img1 = new Image();
+  var img2 = new Image();
+  img.src = "data:image/svg+xml;utf8," + encodeURIComponent(transformShape(patternColors));
+  img1.src = "data:image/svg+xml;utf8," + encodeURIComponent(transformShape(patternColors));
+  img2.src = "data:image/svg+xml;utf8," + encodeURIComponent(transformShape(patternColors));
 
-  // Calculate the number of cells in the grid
-  const cells = rows * cols;
-
-  // Calculate the number of shapes to generate
-  const shapesCount = Math.min(quantity, cells);
-
-  // Calculate the number of shapes that should be in the outermost layer
-  const outermostCount = Math.ceil(cells * 0.7);
-
-  // Create an array to store the shapes
-  const shapes = [];
-
-  // Generate the shapes
-  for (let i = 0; i < shapesCount; i++) {
-    const shape = {
-      color: colors[Math.floor(Math.random() * colors.length)],
-      rotation: Math.floor(Math.random() * 4) * 90
-    };
-    shapes.push(shape);
-  }
-
-  // Fill the grid with shapes
-  const grid = document.getElementById("grid");
-  let shapeIndex = 0;
-  for (let i = 0; i < rows; i++) {
-    for (let j = 0; j < cols; j++) {
-      if (i < 2 || i >= rows - 2 || j < 2 || j >= cols - 2 || shapeIndex < outermostCount) {
-        const shape = shapes[shapeIndex];
-        const cell = document.createElement("div");
-        cell.className = "cell";
-        cell.style.backgroundColor = shape.color;
-        cell.style.transform = `rotate(${shape.rotation}deg)`;
-        grid.appendChild(cell);
-        shapeIndex++;
-      } else {
-        const cell = document.createElement("div");
-        cell.className = "cell";
-        grid.appendChild(cell);
-      }
-    }
-  }
+  img1.onload = function() {
+    var canvas = document.getElementById("pattern-svg");
+    canvas.width = divElement.clientWidth - 300;
+    canvas.height = divElement.clientHeight - 300;
+    var context = canvas.getContext("2d");
+    context.drawImage(img, 0, 100);
+    context.drawImage(img1, 100, 100);
+    context.drawImage(img2, 200, 100);
+  };
 }
 
 // Bold Format option
@@ -257,19 +141,18 @@ formatLabels.forEach((label) => {
     const selectedFormat = label.getAttribute('value');
     switch (selectedFormat) {
       case '9x9':
-        patternFormat.width = 9;
-        patternFormat.height = 9;
+        patternFormat.col = 9;
+        patternFormat.row = 9;
         break;
       case '16x9':
-        patternFormat.width = 16;
-        patternFormat.height = 9;
+        patternFormat.col = 16;
+        patternFormat.row = 9;
         break;
       case '9x16':
-        patternFormat.width = 9;
-        patternFormat.height = 16;
+        patternFormat.col = 9;
+        patternFormat.row = 16;
         break;
     }
-    drawPattern();
   });
 });
 
@@ -284,23 +167,19 @@ sizeLabels.forEach((label) => {
       label.classList.add('bold-label');
   
       patternSize = Number(label.getAttribute('value'));
-      drawPattern();
     });
 });
 
 // Add event listener to each color radio button
 colorRadios.forEach((radio) => {
     radio.addEventListener('click', (event) => {
-        // Remove border from all other color radio buttons
-        colorRadios.forEach((r) => {
-            r.nextElementSibling.querySelector('.rounded-circle').classList.remove('border', 'border-2', 'border-secondary');
-        });
-    
-        // Add border to selected color radio button
-        event.target.nextElementSibling.querySelector('.rounded-circle').classList.add('border', 'border-2', 'border-secondary');
-
-        patternColors = event.target.nextElementSibling.getAttribute('value').split(',');
-        drawPattern();
+        if (event.target.nextElementSibling.querySelector('.rounded-circle').classList.contains('border-2')) {
+          event.target.nextElementSibling.querySelector('.rounded-circle').classList.remove('border', 'border-2', 'border-secondary');
+          removeItem(patternColors, event.target.nextElementSibling.getAttribute('value'));
+        } else {
+          event.target.nextElementSibling.querySelector('.rounded-circle').classList.add('border', 'border-2', 'border-secondary');
+          patternColors.push(event.target.nextElementSibling.getAttribute('value'));
+        }
     });
 });
 
@@ -309,14 +188,21 @@ colorRadios.forEach((radio) => {
  * Initialize the UI
  */
 function initialize() {
-    // Generate the initial pattern
-    const quantity = getSelectedQuantity();
+    // // Generate the initial pattern
+    // const quantity = getSelectedQuantity();
   
-    generatePattern(patternFormatText, patternSize, patternColors, quantity);
+    // generatePattern(patternFormatText, patternSize, patternColors, quantity);
   
     // Attach event listeners
     const generateButton = document.getElementById("generate-button");
     generateButton.addEventListener("click", handleGenerate);
+
+    // const divElement = document.getElementById('canvas-page');
+    // window.addEventListener('resize', function() {
+    //   // get the current width of the div element in pixels
+    //   const divWidth = divElement.clientWidth;
+    //   console.log(divWidth + 'px');
+    // });
 }
   
 // Initialize the UI when the page has loaded

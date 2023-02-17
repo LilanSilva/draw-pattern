@@ -2,13 +2,14 @@
 let patternSize = 2;               
 let patternFormat = { col: 9, row: 9, canvasWidth: 1080, canvasHeigth: 1080 };
 let patternColors = ['red'];
-let patternQuantity = 25;
+let patternQuantity = 10;
 let outerRatio = 0.7;
 let imageType = "svg";
 
 
 // Resize screen 
 function resizeScreen() {
+  const rightMenu = document.getElementById("right-menu");
   const patternGrid = document.getElementById("pattern-grid");
   const heightAdjuster = document.getElementById("height-adjuster");
   const canvas = document.getElementById("pattern-svg");
@@ -16,8 +17,8 @@ function resizeScreen() {
   patternGrid.style.height = (window.innerHeight - (window.innerHeight * 0.16)) + "px";
   heightAdjuster.style.height = (window.innerHeight - 700) + "px";
 
-  var celMinWidth = patternGrid.clientWidth / 16;
-  var celMinHeight = patternGrid.clientHeight / 16;
+  var celMinWidth = rightMenu.clientWidth / 16;
+  var celMinHeight = rightMenu.clientHeight / 16;
   var minCellSize = Math.floor(celMinWidth > celMinHeight ? celMinHeight : celMinWidth);
   canvas.style.width = (minCellSize * patternFormat.col) + "px";
   canvas.style.height = (minCellSize * patternFormat.row) + "px";
@@ -26,37 +27,43 @@ function resizeScreen() {
   canvas.height = patternFormat.canvasHeigth;
 }
 
-// Draw pattern
-function drawPattern() {
-    // Calculate number of rows and columns
-    let numRows = patternFormat.row;
-    let numCols = patternFormat.col;
-  
-    // Calculate cell size
-    const cellSize = 120;
-  
-    let counter = 0;
-    let gridInfo = [];
-    // Generate SVG elements
-    for (let rowIndex = 0; rowIndex < numRows; rowIndex++) {
-      for (let colIndex = 0; colIndex < numCols; colIndex++) {
-        const x = rowIndex * cellSize;
-        const y = colIndex * cellSize;
-
-        // Only draw if in outer layer or random chance
-        if ((rowIndex === 0 || rowIndex === numRows - 1 || colIndex === 0 || colIndex === numCols - 1) && counter < patternQuantity) {
-          let item = {};
-          item.xValue = x;
-          item.yValue = y;
-          item.cellSize = cellSize * patternSize;
-
-          gridInfo.push(item);
-          counter++;
-        }
+// Get drawing points
+function GetPosibleDrawingPoints() {
+  var posibleCells = [];
+  for (let i = 0; i < patternFormat.col - (patternSize - 1); i++) {
+    for (let j = 0; j < patternFormat.row - (patternSize - 1); j++) {
+      if (i === 0 || i === patternFormat.col - patternSize || j === 0 || j === patternFormat.row - patternSize) {
+        posibleCells.push({x: i, y: j});
       }
     }
+  }
 
-    generateCanvas(gridInfo);
+  return posibleCells;
+}
+
+// Draw pattern
+function drawPattern() {
+  var gridInfo = [];
+  var possiblePoints = GetPosibleDrawingPoints();
+
+  for (let i = 0; i < patternQuantity; i++) {
+    var arrayIndex = getRandomInt(possiblePoints.length);
+    var randomCel = possiblePoints[arrayIndex];
+
+    let item = {
+      xValue: 120 * randomCel.x,
+      yValue: 120 * randomCel.y,
+      cellSize: 120 * patternSize
+    };
+    gridInfo.push(item);
+
+    for (let j = 0; j < patternSize; j++) {
+      possiblePoints.splice(arrayIndex, 1);
+      arrayIndex++;
+    }
+  }
+
+  generateCanvas(gridInfo);
 }
 
 // Donload image 
@@ -121,6 +128,8 @@ function eventBinder() {
           patternFormat.canvasHeigth = 1920;
           break;
       }
+
+      resizeScreen();
     });
   });
 

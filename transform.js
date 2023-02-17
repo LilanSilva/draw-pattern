@@ -10,14 +10,6 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-function getColorString(colorOptions) {
-    return colorOptions[getRandomInt(colorOptions.length)];
-}
-
-function getRandomShape() {
-    return SHAPE_TYPES[getRandomInt(SHAPE_TYPES.length)];
-}
-
 // Get rotate status
 function getRandomRotation() {
     let rotation = getRandomInt(4);
@@ -36,11 +28,11 @@ function getRandomRotation() {
 
 // Transform shape according to provide settings
 function transformShape(colorOptions, size) {
-    var shape = getRandomShape();
+    var shape = SHAPE_TYPES[getRandomInt(SHAPE_TYPES.length)];
 
     shape = shape.replaceAll('@@size', (size + 'px'));
     shape = shape.replace('@@rotation', getRandomRotation());
-    shape = shape.replace('@@color', getColorString(colorOptions));
+    shape = shape.replace('@@color', colorOptions[getRandomInt(colorOptions.length)]);
 
     return shape;
 }

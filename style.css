@@ -1,6 +1,6 @@
-#pattern-grid {
+/* #pattern-grid {
     border: 1px solid #000;
-}
+} */
 
 #left-menu {
     background-color: #e6e6e6;
@@ -110,8 +110,4 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
-  
-.grid-box {
-    background-color: #ccc;
 }

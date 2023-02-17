@@ -1,8 +1,8 @@
 // Global variables
-let patternSize = 50;               
+let patternSize = 2;               
 let patternFormat = { col: 9, row: 9, canvasWidth: 1080, canvasHeigth: 1080 };
 let patternColors = ['red'];
-let patternQuantity = 10;
+let patternQuantity = 25;
 let outerRatio = 0.7;
 let imageType = "svg";
 
@@ -31,8 +31,7 @@ function drawPattern() {
     let numCols = patternFormat.col;
   
     // Calculate cell size
-    const divElement = document.getElementById('pattern-svg');
-    const cellSize = Math.floor((divElement.clientWidth - 100) / numCols);
+    const cellSize = 120;
   
     let counter = 0;
     let gridInfo = [];
@@ -47,7 +46,7 @@ function drawPattern() {
           let item = {};
           item.xValue = x;
           item.yValue = y;
-          item.cellSize = cellSize;
+          item.cellSize = cellSize * patternSize;
 
           gridInfo.push(item);
           counter++;
@@ -79,7 +78,7 @@ function generateCanvas(gridInfo) {
 
     gridInfo.forEach((item) => {
       var img = new Image();
-      img.src = "data:image/svg+xml;utf8," + encodeURIComponent(transformShape(patternColors, 25));
+      img.src = "data:image/svg+xml;utf8," + encodeURIComponent(transformShape(patternColors, item.cellSize));
 
       img.onload = function() {
         context.drawImage(img, item.xValue, item.yValue);

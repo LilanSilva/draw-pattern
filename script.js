@@ -11,14 +11,13 @@ let imageType = "svg";
 function resizeScreen() {
   const patternGrid = document.getElementById("pattern-grid");
   const heightAdjuster = document.getElementById("height-adjuster");
-  const divElement = document.getElementById('right-menu');
   const canvas = document.getElementById("pattern-svg");
 
   patternGrid.style.height = (window.innerHeight - (window.innerHeight * 0.16)) + "px";
   heightAdjuster.style.height = (window.innerHeight - 700) + "px";
 
-  var celMinWidth = (divElement.clientWidth - (divElement.clientWidth * 0.2)) / patternFormat.col;
-  var celMinHeight = (divElement.clientHeight - (divElement.clientHeight * 0.2)) / patternFormat.row;
+  var celMinWidth = patternGrid.clientWidth / 16;
+  var celMinHeight = patternGrid.clientHeight / 16;
   var minCellSize = Math.floor(celMinWidth > celMinHeight ? celMinHeight : celMinWidth);
   canvas.style.width = (minCellSize * patternFormat.col) + "px";
   canvas.style.height = (minCellSize * patternFormat.row) + "px";

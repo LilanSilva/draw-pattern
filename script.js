@@ -17,8 +17,11 @@ function resizeScreen() {
   patternGrid.style.height = (window.innerHeight - (window.innerHeight * 0.16)) + "px";
   heightAdjuster.style.height = (window.innerHeight - 700) + "px";
 
-  canvas.style.width = (divElement.clientWidth - (divElement.clientWidth * 0.16)) + "px";
-  canvas.style.height = (divElement.clientHeight - 300) + "px";
+  var celMinWidth = (divElement.clientWidth - (divElement.clientWidth * 0.2)) / patternFormat.col;
+  var celMinHeight = (divElement.clientHeight - (divElement.clientHeight * 0.2)) / patternFormat.row;
+  var minCellSize = Math.floor(celMinWidth > celMinHeight ? celMinHeight : celMinWidth);
+  canvas.style.width = (minCellSize * patternFormat.col) + "px";
+  canvas.style.height = (minCellSize * patternFormat.row) + "px";
 
   canvas.width = patternFormat.canvasWidth;
   canvas.height = patternFormat.canvasHeigth;

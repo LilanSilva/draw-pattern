@@ -41,25 +41,55 @@ function GetPosibleDrawingPoints() {
   return posibleCells;
 }
 
+// Check overlap
+function checkOverlap(gridInfo, randomCel) {
+  let overlapStatus = false;
+
+  for (let i = 0; i < gridInfo.length; i++) {
+    if ((gridInfo[i].xValue < randomCel.x && gridInfo[i].xValue + patternSize > randomCel.x) || (gridInfo[i].xValue > randomCel.x && gridInfo[i].xValue - patternSize < randomCel.x)) {
+      overlapStatus = true;
+      break;
+    }
+    else if ((gridInfo[i].yValue < randomCel.y && gridInfo[i].yValue + patternSize > randomCel.y) || (gridInfo[i].yValue > randomCel.y && gridInfo[i].yValue - patternSize < randomCel.y)) {
+      overlapStatus = true;
+      break;
+    } 
+    else if (randomCel.x === gridInfo[i].xValue && gridInfo[i].yValue + patternSize > randomCel.y) {
+      overlapStatus = true;
+      break;
+    }
+  }
+
+  return overlapStatus;
+}
+
 // Draw pattern
 function drawPattern() {
-  var gridInfo = [];
-  var possiblePoints = GetPosibleDrawingPoints();
+  let maximumOverlapChecker = 0;
+  let gridInfo = [];
+  let possiblePoints = GetPosibleDrawingPoints();
 
   for (let i = 0; i < patternQuantity; i++) {
-    var arrayIndex = getRandomInt(possiblePoints.length);
-    var randomCel = possiblePoints[arrayIndex];
+    let arrayIndex = getRandomInt(possiblePoints.length);
+    let randomCel = possiblePoints[arrayIndex];
 
-    let item = {
-      xValue: 120 * randomCel.x,
-      yValue: 120 * randomCel.y,
-      cellSize: 120 * patternSize
-    };
-    gridInfo.push(item);
+    if (patternSize === 1 || !checkOverlap(gridInfo, randomCel)) {
+      let item = {
+        xValue: randomCel.x,
+        yValue: randomCel.y
+      };
 
-    for (let j = 0; j < patternSize; j++) {
+      gridInfo.push(item);
       possiblePoints.splice(arrayIndex, 1);
-      arrayIndex++;
+    }
+    else {
+      // Fix overlap issue
+      i--;
+      maximumOverlapChecker++;
+
+      if (maximumOverlapChecker === 2000) {
+        break;
+      }
     }
   }
 
@@ -72,7 +102,7 @@ function downloadImage() {
     exportSvg();
   }
   else {
-    canvasExportAsPng();
+    exportPng();
   }
 }
   
@@ -87,10 +117,10 @@ function generateCanvas(gridInfo) {
 
     gridInfo.forEach((item) => {
       var img = new Image();
-      img.src = "data:image/svg+xml;utf8," + encodeURIComponent(transformShape(patternColors, item.cellSize));
+      img.src = "data:image/svg+xml;utf8," + encodeURIComponent(transformShape(patternColors, patternSize * 120));
 
       img.onload = function() {
-        context.drawImage(img, item.xValue, item.yValue);
+        context.drawImage(img, item.xValue * 120, item.yValue * 120);
       };
     });
   }

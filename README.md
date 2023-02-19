@@ -1,2 +1,0 @@
-# draw-pattern
-Draw pattern
